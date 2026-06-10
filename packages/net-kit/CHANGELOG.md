@@ -1,23 +1,4 @@
-# 5.3.5-dev.6
-
-Pre-release for 5.3.5.
-
-### Bug Fixes
-
-- Fix runtime crash when `containsAccessToken: false` is used with caller-provided `Map<String, String>` headers
-
-# 5.3.5-dev.5
-
-Pre-release for 5.3.5.
-
-### Features
-
-- Added `uploadRawData` for direct binary uploads (`application/octet-stream`) without multipart encoding
-- Added `uploadFile` convenience method to read a file from disk and upload as raw bytes (IO platforms only)
-
-# 5.3.5-dev.4
-
-Pre-release for 5.3.5.
+# 5.4.0
 
 ### Features
 
@@ -26,25 +7,28 @@ Pre-release for 5.3.5.
 - RFC 9110-safe default: POST/PATCH are not replayed after 401 unless `allowRetryOn401: true`
 - Optional `refreshTokenContentType: formUrlEncoded` for OAuth backends
 - `requestVoid` accepts 204; `requestModel` / `requestList` throw `emptyResponseBodyError` on 204/empty body
+- Added `uploadRawData` for direct binary uploads (`application/octet-stream`) without multipart encoding
+- Added `uploadFile` convenience method to read a file from disk and upload as raw bytes (IO platforms only)
 
 ### Improvements
 
+- Renamed `testMode` to `devMode` on `NetKitManager` and `NetKitParams` for clarity
 - Retry requests merge per-request headers and forward `cancelToken` / progress callbacks
 - Refresh requests tagged with internal `__isRefreshRequest` guard; normalized refresh path matching
 - `devMode` logs a warning when access tokens contain whitespace (RFC 6750)
+- Clarify that `loggerEnabled` and `logInterceptorEnabled` only take effect when `devMode` is true
+- Added `invalidTokenResponseError` to `NetKitErrorParams` for refresh token parse failures
+- Preserve wrapped `ApiException` messages when converting `DioException` to `ApiException`
+- Run CI `dart analyze` from `packages/net-kit`
+- Backfill CHANGELOG entries for 5.3.1–5.3.4
+- Correct misleading docs (retry claim, `setAccessToken` example, `MIGRATION.md` token mapping)
 
 ### Bug Fixes
 
+- Fix runtime crash when `containsAccessToken: false` is used with caller-provided `Map<String, String>` headers
 - Fix refresh failure propagation (`Completer.completeError` no longer leaks uncaught errors)
 - Fix retry limit so retried 401s do not trigger a second refresh
 - Propagate refresh/retry `DioException` responses correctly to callers
-
-# 5.3.5-dev.3
-
-Pre-release for 5.3.5.
-
-### Bug Fixes
-
 - Fix metadata map mutation in `requestModelMeta` and `requestListMeta` (response maps are no longer modified in place)
 - Fix `useDataKey: false` handling on meta endpoints to match non-meta methods and README
 - Prevent double `Bearer` prefix when `setAccessToken` is called with a token that already includes the prefix
@@ -52,39 +36,16 @@ Pre-release for 5.3.5.
 - Parse `List<dynamic>` error message arrays in `ApiException.fromJson`
 - Validate HTTP status codes after token-refresh retries (consistent with `_sendRequest`)
 - Fail token refresh immediately with `noInternetError` when `internetStatusStream` reports offline
-
-### Improvements
-
-- Run CI `dart analyze` from `packages/net-kit`
-- Backfill CHANGELOG entries for 5.3.1–5.3.4
-- Correct misleading docs (retry claim, `setAccessToken` example, `MIGRATION.md` token mapping)
-
-# 5.3.5-dev.2
-
-### Improvements
-
-- Renamed `testMode` to `devMode` on `NetKitManager` and `NetKitParams` for clarity
-
-### Deprecations
-
-- `testMode` is deprecated in favor of `devMode` (alias retained for one release; removed in a future major version)
-
-# 5.3.5-dev.1
-
-Pre-release for 5.3.5.
-
-### Bug Fixes
-
 - Register the user-provided `interceptor` in `NetKitManager` (was stored but never added to Dio)
 - Validate HTTP status codes in `uploadMultipartData` and `uploadFormData` (consistent with other request methods)
 - Fail token refresh when the refresh response is missing a valid access token (previously succeeded silently)
 - Remove fragile `package:dio/src/*` re-exports; public Dio types remain available via `package:dio/dio.dart`
 
-### Improvements
+### Deprecations
 
-- Clarify that `loggerEnabled` and `logInterceptorEnabled` only take effect when `devMode` is true
-- Added `invalidTokenResponseError` to `NetKitErrorParams` for refresh token parse failures
-- Preserve wrapped `ApiException` messages when converting `DioException` to `ApiException`
+- `testMode` is deprecated in favor of `devMode` (alias retained for one release; removed in a future major version)
+
+See [MIGRATION.md](MIGRATION.md) for auth refresh and `devMode` migration details.
 
 # 5.3.4-dev
 

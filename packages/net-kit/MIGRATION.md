@@ -1,6 +1,6 @@
 # Migration Guidance
 
-## Auth refresh hardening: v5.3.5-dev.4
+## Auth refresh hardening: v5.4.0
 
 ### New per-request flags
 
@@ -32,7 +32,7 @@ NetKitManager(
 
 Net-Kit does not implement HTTP caching (ETag, Cache-Control, etc.).
 
-## testMode renamed to devMode: v5.3.5-dev.2
+## testMode renamed to devMode: v5.4.0
 
 ### Why was it renamed?
 
