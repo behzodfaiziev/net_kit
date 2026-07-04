@@ -1,3 +1,9 @@
+# 5.4.1
+
+### Bug Fixes
+
+- Fix `requestList` treating HTTP 200 with an empty JSON array (`[]`) as an empty response body; empty lists are now parsed as `[]` instead of throwing `emptyResponseBodyError`
+
 # 5.4.0
 
 ### Features

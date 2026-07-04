@@ -135,10 +135,6 @@ mixin RequestManagerMixin on DioMixin {
       return true;
     }
 
-    if (data is List && data.isEmpty) {
-      return true;
-    }
-
     return false;
   }
 

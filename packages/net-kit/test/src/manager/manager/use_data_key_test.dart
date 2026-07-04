@@ -74,5 +74,21 @@ void main() {
       expect(result, hasLength(2));
       expect(result.map((item) => item.id), [1, 2]);
     });
+
+    test('requestList accepts HTTP 200 with empty array body', () async {
+      adapter.onGet(
+        '/empty-list',
+        (server) => server.reply(200, <Map<String, dynamic>>[]),
+      );
+
+      final result = await manager.requestList<_IdModel>(
+        path: '/empty-list',
+        method: RequestMethod.get,
+        model: const _IdModel(),
+        useDataKey: false,
+      );
+
+      expect(result, isEmpty);
+    });
   });
 }
