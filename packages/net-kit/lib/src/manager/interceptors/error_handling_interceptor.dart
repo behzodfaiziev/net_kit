@@ -94,7 +94,7 @@ class ErrorHandlingInterceptor {
           await tokenManager.refreshTokens();
           _refreshCompleter!.complete();
           await requestQueue.processQueue();
-          return _finishAfterRefresh(error, handler);
+          return await _finishAfterRefresh(error, handler);
         } on Object catch (e) {
           _refreshFailure = e;
           if (!_refreshCompleter!.isCompleted) {

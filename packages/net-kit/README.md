@@ -30,6 +30,7 @@
     * [**Quick Token Setup**](#quick-token-setup)
     * [**Comprehensive Token Management**](#comprehensive-token-management)
   * [**Logger Integration**](#logger-integration)
+  * [**Raw HTTP transport**](#raw-http-transport)
 * [Migration Guidance](#migration-guidance)
   * [**Feature Status**](#feature-status)
   * [**Contributing**](#contributing)
@@ -49,6 +50,7 @@
 - 🌐 Internationalization support for error messages
 - 📦 Multipart upload support
 - 📋 Extensible logger integration
+- 📡 Isolated raw HTTP transport for streaming bodies and absolute URLs
 
 <!-- ## **Sponsors**
 
@@ -270,6 +272,61 @@ Set `devMode` to `kDebugMode` (or similar) in development and keep it `false` in
 
 The deprecated `testMode` parameter still works in this release but will be removed in a future major version.
 
+## **Raw HTTP transport**
+
+`NetKitManager` is the API/model-oriented HTTP client: JSON envelopes, `INetKitModel`,
+`dataKey`, authentication, and token refresh.
+
+`RawHttpClient` is a separate, isolated, **transport-independent** HTTP
+contract. `DioRawHttpClient` is the built-in Dio implementation.
+
+Application and protocol code should depend on `RawHttpClient`, not
+`DioRawHttpClient`. Choose the implementation only at the composition / DI
+root so a future `package:http` or `dart:io` adapter can replace Dio without
+changing callers.
+
+It does not attach authorization, does not refresh tokens, and does not treat
+non-2xx statuses as API errors.
+
+Use it when you need to talk to header-driven protocols (for example a
+resumable upload session on an absolute HTTPS URL). Interpret statuses such as
+308, 404, or 410 in your own protocol layer — NetKit only returns the status,
+headers, and body.
+
+```dart
+final class UploadTransport {
+  UploadTransport(this.client);
+
+  final RawHttpClient client;
+}
+
+final RawHttpClient client = DioRawHttpClient();
+final transport = UploadTransport(client);
+```
+
+```dart
+final RawHttpClient client = DioRawHttpClient();
+
+final file = File(filePath);
+final length = await file.length();
+
+final response = await client.send(
+  RawHttpRequest(
+    uri: Uri.parse(uploadUrl),
+    method: RawHttpMethod.put,
+    headers: {
+      'Content-Type': 'application/octet-stream',
+    },
+    body: StreamRawHttpBody(
+      stream: file.openRead(),
+      contentLength: length,
+    ),
+  ),
+);
+
+print(response.statusCode);
+```
+
 # Migration Guidance
 
 ➡️ For detailed upgrade steps and breaking changes, see the full [Migration Guide](https://github.com/behzodfaiziev/net-kit/blob/main/packages/net-kit/MIGRATION.md).
@@ -298,6 +355,7 @@ The deprecated `testMode` parameter still works in this release but will be remo
 | Error handling strategies                                   |    ✅     |
 | File upload with wrapper patterns                           |    ✅     |
 | Token management documentation                              |    ✅     |
+| Isolated raw HTTP transport (`RawHttpClient`)               |    ✅     |
 
 ## **Contributing**
 

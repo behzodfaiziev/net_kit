@@ -1,3 +1,18 @@
+# 5.5.0-dev
+
+### Features
+
+- Added isolated, transport-independent `RawHttpClient` for generic raw HTTP
+  (absolute URLs, streaming bodies, caller-owned headers, and status/header
+  inspection without API, auth, or model semantics)
+- `DioRawHttpClient` is the built-in Dio implementation (`DioRawHttpClient()`);
+  application code should depend on `RawHttpClient` so the adapter can change
+  later without caller changes
+- HTTP statuses such as 308, 404, 410, and 500 are returned as
+  `RawHttpResponse`; transport failures throw `RawHttpException`
+- `RawHttpCancellationToken` cancels in-flight raw requests without exposing
+  Dio's `CancelToken`
+
 # 5.4.1
 
 ### Bug Fixes

@@ -25,5 +25,15 @@ export 'src/model/i_net_kit_model.dart';
 /// VoidModel
 export 'src/model/void_model.dart';
 
+/// Isolated raw HTTP transport
+export 'src/raw/dio/dio_raw_http_client.dart';
+export 'src/raw/raw_http_body.dart';
+export 'src/raw/raw_http_cancellation_token.dart' show RawHttpCancellationToken;
+export 'src/raw/raw_http_client.dart';
+export 'src/raw/raw_http_exception.dart';
+export 'src/raw/raw_http_method.dart';
+export 'src/raw/raw_http_request.dart';
+export 'src/raw/raw_http_response.dart';
+
 /// Logger Interface
 export 'src/utility/logger/i_net_kit_logger.dart';
